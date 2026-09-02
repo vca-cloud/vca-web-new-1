@@ -361,6 +361,8 @@ class Component extends DCLogic {
     const closeMenu   = () => this.setState({ menuOpen: false });
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (this._sending) return;
+      this._sending = true;
       const form = e.target;
       const params = {
         from_email: form.querySelector('input[type="email"]').value,
@@ -370,7 +372,7 @@ class Component extends DCLogic {
       };
       emailjs.send('service_7pidelr', 'template_a2dn5zp', params)
         .then(() => this.setState({ submitted: true }))
-        .catch(() => alert('Gửi thất bại, vui lòng thử lại.'));
+        .catch(() => { this._sending = false; alert('Gửi thất bại, vui lòng thử lại.'); });
     };
 
     const vi = {
