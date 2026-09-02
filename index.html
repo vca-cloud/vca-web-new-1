@@ -15,6 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>window.addEventListener('load',()=>emailjs.init('X5uIj9XwrZTcniCGF'));</script>
   <script src="./image-slot.js"></script>
   <script>
     (function(){
@@ -357,7 +359,19 @@ class Component extends DCLogic {
     };
     const toggleMenu  = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
     const closeMenu   = () => this.setState({ menuOpen: false });
-    const handleSubmit = (e) => { e.preventDefault(); this.setState({ submitted: true }); };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const params = {
+        from_email: form.querySelector('input[type="email"]').value,
+        phone: form.querySelector('input[type="tel"]').value,
+        message: form.querySelector('textarea').value,
+        name: form.querySelector('input[type="email"]').value,
+      };
+      emailjs.send('service_7pidelr', 'template_a2dn5zp', params)
+        .then(() => this.setState({ submitted: true }))
+        .catch(() => alert('Gửi thất bại, vui lòng thử lại.'));
+    };
 
     const vi = {
       navHome: 'Trang chủ', navAbout: 'Về chúng tôi', navEco: 'Hệ sinh thái', navContact: 'Liên hệ',
